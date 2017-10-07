@@ -21,8 +21,7 @@ You can find them in the example.
 
 ### v0.5.0
 - React 16 compatibility.
-- Fix [#84](https://github.com/sohobloo/react-native-modal-dropdown/issues/84)  
-**Sorry for late. I'm looking for a new job these days. Any help? :-(**
+- Fix [#84](https://github.com/sohobloo/react-native-modal-dropdown/issues/84)
 
 [Full update history list](https://github.com/sohobloo/react-native-modal-dropdown/wiki/Update-History)
 
@@ -74,6 +73,7 @@ Prop                | Type     | Optional | Default   | Description
 `adjustFrame`       | func     | Yes      |           | This is a callback after the frame of the dropdown have been calculated and before showing. You will receive a style object as argument with some of the props like `width` `height` `top` `left` and `right`. Change them to appropriate values that accord with your requirement and **make the new style as the return value of this function**.
 `renderRow`         | func     | Yes      |           | Customize render option rows. **Will render a default row if `null`/`undefined`.**
 `renderSeparator`   | func     | Yes      |           | Customize render dropdown list separators. **Will render a default thin gray line if `null`/`undefined`.**
+`buttonText`    | string | yes | false | If your every options' value is an object, you must specify the buttonText(selectedValue) by yourself,and you can set buttonText(selectedValue) on onSelect() function. you don't have to set this prop, but you should set this prop when you find your selected input box's value is '[object object]'
 `onDropdownWillShow`| func     | Yes      |           | Trigger when dropdown will show by touching the button. **Return `false` can cancel the event.**
 `onDropdownWillHide`| func     | Yes      |           | Trigger when dropdown will hide by touching the button. **Return `false` can cancel the event.**
 `onSelect`          | func     | Yes      |           | Trigger when option row touched with selected `index` and `value`. **Return `false` can cancel the event.**
@@ -86,6 +86,53 @@ Method            |  Description
 `show()`          |  Show the dropdown. **Won't trigger `onDropdownWillShow`.**
 `hide()`          |  Hide the dropdown. **Won't trigger `onDropdownWillHide`.**
 `select(idx)`     |  Select the specified option of the `idx`. Select `-1` will reset it to display `defaultValue`. **Won't trigger `onSelect`.**
+
+### Example
+```
+import ModalDropdown from 'react-native-modal-dropdown';
+
+const data = [
+	{id: 0, name: 'dog'},
+	{id: 1, name: 'cat'},
+	{id: 2, name: 'mouse'}
+];
+
+constructor(props) {
+    super(props);
+    this.state = {
+        selectedValue: '',
+        selectedId: '',
+    };
+}
+
+onSelect(index, value) {
+	if (this.state.selectedId != value.id) {
+	    this.setState({
+	        selectedValue: value.name ,
+	        selectedId: value.id
+	    });
+	}
+}
+
+_renderRow(rowData) {
+	return(
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                <Text>{rowData.name}</Text>
+            </View>
+
+        )
+}
+
+render() {
+    <ModalDropdown
+        defaultValue={data[0] ? data[0].name : '暂无数据'}
+        renderRow={this._renderRow.bind(this)}
+        options={data}
+        buttonText={this.state.selectedValue}
+        onSelect={this.onSelect.bind(this)}
+    />
+}
+```
 
 ## Next version
 Any suggestion is welcome.

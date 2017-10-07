@@ -50,7 +50,8 @@ export default class ModalDropdown extends Component {
 
     onDropdownWillShow: PropTypes.func,
     onDropdownWillHide: PropTypes.func,
-    onSelect: PropTypes.func
+    onSelect: PropTypes.func,
+    buttonText: PropTypes.string
   };
 
   static defaultProps = {
@@ -164,7 +165,7 @@ export default class ModalDropdown extends Component {
             <View style={styles.button}>
               <Text style={[styles.buttonText, this.props.textStyle]}
                     numberOfLines={1}>
-                {this.state.buttonText}
+                {this.props.buttonText ? this.props.buttonText : this.state.buttonText}
               </Text>
             </View>
           )
@@ -281,6 +282,7 @@ export default class ModalDropdown extends Component {
   }
 
   _renderRow(rowData, sectionID, rowID, highlightRow) {
+
     let key = `row_${rowID}`;
     let highlighted = rowID == this.state.selectedIndex;
     let row = !this.props.renderRow ?
@@ -355,7 +357,7 @@ export default class ModalDropdown extends Component {
     if (!this.props.onSelect ||
       this.props.onSelect(rowID, rowData) !== false) {
       highlightRow(sectionID, rowID);
-      this._nextValue = rowData;
+      this._nextValue = rowData; //.hospitalName;
       this._nextIndex = rowID;
       this.setState({
         buttonText: rowData.toString(),
